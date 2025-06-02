@@ -27,21 +27,21 @@
 
     - name: Crear directorio del proyecto
       file:
-        path: /opt/webstack
+        path: /srv/docker/web
         state: directory
 
     - name: Copiar docker-compose.yml al servidor
       copy:
         src: docker-compose.yml
-        dest: /opt/webstack/docker-compose.yml
+        dest: /srv/docker/web/docker-compose.yml
 
     - name: Copiar carpeta web al servidor
       copy:
-        src: web/
-        dest: /opt/webstack/web/
+        src: content/
+        dest: /srv/docker/web/content/
         mode: preserve
 
     - name: Levantar servicios con docker-compose
       shell: docker-compose up -d
       args:
-        chdir: /opt/webstack
+        chdir: /srv/docker/web
