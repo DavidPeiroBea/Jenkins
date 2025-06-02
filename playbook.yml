@@ -1,0 +1,47 @@
+---
+- name: Configurar servidor con Docker y lanzar Apache + MySQL
+  hosts: dockerhost
+  become: true
+
+  tasks:
+    - name: Instalar dependencias básicas
+      apt:
+        name: [apt-transport-https, ca-certificates, curl, software-properties-common]
+        update_cache: yes
+
+    - name: Agregar GPG de Docker
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Agregar repositorio de Docker
+      apt_repository:
+        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable
+        state: present
+
+    - name: Instalar Docker y Docker Compose
+      apt:
+        name: [docker-ce, docker-ce-cli, containerd.io, docker-compose]
+        state: present
+        update_cache: yes
+
+    - name: Crear directorio del proyecto
+      file:
+        path: /opt/webstack
+        state: directory
+
+    - name: Copiar docker-compose.yml al servidor
+      copy:
+        src: docker-compose.yml
+        dest: /opt/webstack/docker-compose.yml
+
+    - name: Copiar carpeta web al servidor
+      copy:
+        src: web/
+        dest: /opt/webstack/web/
+        mode: preserve
+
+    - name: Levantar servicios con docker-compose
+      shell: docker-compose up -d
+      args:
+        chdir: /opt/webstack
