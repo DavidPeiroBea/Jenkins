@@ -29,7 +29,7 @@ pipeline {
       steps {
         sshagent([env.SSH_CREDENTIALS_ID]) {
           script {
-            def sudoPass = sh(script: 'cat /run/secrets/jenkins.secret.txt', returnStdout: true).trim()
+            def sudoPass = sh(script: 'cat /run/secrets/jenkins.secret', returnStdout: true).trim()
             sh "ansible-playbook -i inventario.ini playbook.yml --extra-vars 'ansible_become_pass=${sudoPass}'"
           }
         }
