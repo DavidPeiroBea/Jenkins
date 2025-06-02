@@ -14,7 +14,6 @@ pipeline {
 
     stage('Configurar SSH Known Hosts') {
       steps {
-        // Usa la clave SSH almacenada en Jenkins para el acceso remoto
         sshagent([env.SSH_CREDENTIALS_ID]) {
           sh '''
             mkdir -p ~/.ssh
@@ -29,7 +28,10 @@ pipeline {
     stage('Ejecutar playbook Ansible') {
       steps {
         sshagent([env.SSH_CREDENTIALS_ID]) {
-          sh 'ansible-playbook -i inventario.ini playbook.yml'
+          script {
+            def sudoPass = sh(script: 'cat /run/secrets/jenkins.secret.txt', returnStdout: true).trim()
+            sh "ansible-playbook -i inventario.ini playbook.yml --extra-vars 'ansible_become_pass=${sudoPass}'"
+          }
         }
       }
     }
