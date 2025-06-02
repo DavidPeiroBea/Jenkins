@@ -1,11 +1,37 @@
 pipeline {
-    agent any
+  agent any
 
-    stages {
-        stage('Ejecutar playbook Ansible') {
-            steps {
-                sh 'ansible-playbook -i inventario.ini playbook.yml'
-            }
-        }
+  environment {
+    SSH_CREDENTIALS_ID = 'UsuarioSSH'  
+  }
+
+  stages {
+    stage('Checkout') {
+      steps {
+        checkout scm
+      }
     }
+
+    stage('Configurar SSH Known Hosts') {
+      steps {
+        // Usa la clave SSH almacenada en Jenkins para el acceso remoto
+        sshagent([env.SSH_CREDENTIALS_ID]) {
+          sh '''
+            mkdir -p ~/.ssh
+            chmod 700 ~/.ssh
+            ssh-keyscan -H 172.32.173.9 >> ~/.ssh/known_hosts
+            chmod 644 ~/.ssh/known_hosts
+          '''
+        }
+      }
+    }
+
+    stage('Ejecutar playbook Ansible') {
+      steps {
+        sshagent([env.SSH_CREDENTIALS_ID]) {
+          sh 'ansible-playbook -i inventario.ini playbook.yml'
+        }
+      }
+    }
+  }
 }
