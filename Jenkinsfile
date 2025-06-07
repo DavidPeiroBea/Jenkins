@@ -1,6 +1,10 @@
 pipeline {
   agent any
 
+  triggers {
+    pollSCM('H/2 * * * *') // Verifica cambios en Git cada 2 minutos
+  }
+
   environment {
     SSH_CREDENTIALS_ID = 'UsuarioSSH'  
   }
