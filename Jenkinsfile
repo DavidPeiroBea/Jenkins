@@ -20,7 +20,7 @@ pipeline {
       steps {
         sshagent([env.SSH_CREDENTIALS_ID]) {
           sh '''
-            ssh-keyscan -H 172.32.173.10 >> ~/.ssh/known_hosts
+            ssh-keyscan -H 172.32.173.11 >> ~/.ssh/known_hosts
             chmod 644 ~/.ssh/known_hosts
           '''
         }
