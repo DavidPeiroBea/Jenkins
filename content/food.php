@@ -1,5 +1,6 @@
 <?php
-$conexion = new mysqli("localhost", "alimentos", "1234", "proyecto");
+$password = trim(file_get_contents(__DIR__ . '/.dbpass'));
+$conexion = new mysqli("mysql_db", "alimentos", $password, "proyecto");
 
 if ($conexion->connect_error) {
     die("Conexión fallida: " . $conexion->connect_error);
