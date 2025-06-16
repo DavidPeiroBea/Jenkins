@@ -3,7 +3,8 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Location: index.php');
     exit();
 }
-$conexion = new mysqli("localhost", "alimentos", "1234", "proyecto");
+$password = trim(file_get_contents(__DIR__ . '/.dbpass'));
+$conexion = new mysqli("localhost", "alimentos", $password, "proyecto");
 
 if ($conexion->connect_error) {
     die("Conexión fallida: " . $conexion->connect_error);

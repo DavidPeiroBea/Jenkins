@@ -1,7 +1,9 @@
 ---
-- name: Configurar servidor con Docker y lanzar Apache + MySQL
+- name: Configurar servidor con Docker, Apache, MySQL y DB segura
   hosts: dockerhost
   become: true
+  vars:
+    mysql_container: mysql_db
 
   tasks:
     - name: Instalar dependencias básicas
@@ -45,3 +47,47 @@
       shell: docker-compose up -d
       args:
         chdir: /srv/docker/web
+
+    # --- Configurar base de datos de forma segura ---
+
+    - name: Esperar a que MySQL esté listo (dentro del contenedor)
+      shell: |
+        docker exec {{ mysql_container }} bash -c \
+        'until mysqladmin ping -uroot -prootpass --silent; do sleep 3; done'
+      register: wait_result
+      retries: 10
+      delay: 5
+      until: wait_result.rc == 0
+
+    - name: Leer contraseña del secreto local  # Esto siempre lo devuelve en base64
+      slurp:
+        src: /run/secrets/jenkins-secret
+      register: secret
+
+    - name: Decodificar secreto
+      set_fact:
+        alimentos_password: "{{ secret['content'] | b64decode | trim }}"
+
+    - name: Guardar contraseña en archivo para uso de PHP
+      copy:
+        dest: /srv/docker/web/content/.dbpass
+        content: "{{ alimentos_password }}"
+        owner: www-data
+        group: www-data
+        mode: '0600'
+
+
+    - name: Generar script SQL para crear DB, tabla y usuario
+      template:
+        src: templates/inicializar.sql.j2
+        dest: /srv/docker/web/inicializar.sql
+
+    - name: Ejecutar SQL dentro del contenedor MySQL
+      shell: |
+        docker exec -i {{ mysql_container }} \
+        mysql -uroot -prootpass < /srv/docker/web/inicializar.sql
+
+    - name: Eliminar script SQL del servidor
+      file:
+        path: /srv/docker/web/inicializar.sql
+        state: absent

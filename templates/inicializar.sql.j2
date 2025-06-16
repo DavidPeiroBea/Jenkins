@@ -1,0 +1,17 @@
+CREATE DATABASE IF NOT EXISTS proyecto;
+
+CREATE USER IF NOT EXISTS 'alimentos'@'%' IDENTIFIED BY '{{ alimentos_password }}';
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON proyecto.* TO 'alimentos'@'%';
+
+USE proyecto;
+
+CREATE TABLE IF NOT EXISTS alimentos (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  alimento VARCHAR(100) NOT NULL,
+  distribuidor VARCHAR(100) NOT NULL,
+  cantidad INT NOT NULL,
+  precio DECIMAL(10,2) NOT NULL
+);
+
+FLUSH PRIVILEGES;
