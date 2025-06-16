@@ -61,7 +61,7 @@
 
     - name: Copiar archivo secreto a remoto
       copy:
-        src: ./jenkins.secret.txt
+        src: /run/secrets/jenkins-secret
         dest: /tmp/jenkins-secret
         mode: '0600'
 
