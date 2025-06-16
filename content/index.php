@@ -10,7 +10,7 @@
   </head>
   <div class="container">
     <h1>Registrar Comida</h1>
-    <form id="registroForm">
+    <form id="registroForm" method="POST" action="guardar.php">
       <div>
         <label for="alimento">Alimento</label>
         <input type="text" id="alimento" name="alimento" required />
@@ -25,7 +25,7 @@
       </div>
       <div>
         <label for="precio">Precio (EUR)</label>
-        <input type="number" id="precio" name="precio" min="0" step="1" required />
+        <input type="number" id="precio" name="precio" min="0" step="0.5" required />
       </div>
       <button type="submit">Registrar</button>
     </form>
