@@ -59,14 +59,19 @@
       delay: 5
       until: wait_result.rc == 0
 
-    - name: Leer contraseña del secreto local  # Esto siempre lo devuelve en base64
-      slurp:
-        src: /run/secrets/jenkins-secret
+    - name: Copiar archivo secreto a remoto
+      copy:
+        src: ./jenkins.secret.txt
+        dest: /tmp/jenkins-secret
+        mode: '0600'
+
+    - name: Leer contraseña desde archivo copiado
+      command: cat /tmp/jenkins-secret
       register: secret
 
-    - name: Decodificar secreto
+    - name: Definir variable con la contraseña leída
       set_fact:
-        alimentos_password: "{{ secret['content'] | b64decode | trim }}"
+        alimentos_password: "{{ secret.stdout | trim }}"
 
     - name: Guardar contraseña en archivo para uso de PHP
       copy:
@@ -75,7 +80,6 @@
         owner: www-data
         group: www-data
         mode: '0600'
-
 
     - name: Generar script SQL para crear DB, tabla y usuario
       template:
