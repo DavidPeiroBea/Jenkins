@@ -8,9 +8,6 @@
   <head>
 
   </head>
-  <div>
-    <h1>Pedidos para mi TIENDA</h1>
-  </div>
   <div class="container">
     <h1>Registrar Comida</h1>
     <form id="registroForm" method="POST" action="guardar.php">
