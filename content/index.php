@@ -1,16 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Mi web con Docker y Jenkins - Nuevo Contenido</title>
+  <title>Mi web con Docker y Jenkins</title>
   <link href="style.css" rel="stylesheet" type="text/css">
 </head>
 <body>
+  <head>
+
+  </head>
   <div class="container">
-    <h1>¡Bienvenido a la Gestión de Stock!</h1>
-    <p>Utiliza el formulario para registrar nuevos artículos en el inventario.</p>
-  </div>
-  <div class="container" style="margin-top: 20px;">
-    <h1>Gestión de Stock de Alimentos</h1>
+    <h1>Registrar Comida</h1>
     <form id="registroForm" method="POST" action="guardar.php">
       <div>
         <label for="alimento">Alimento</label>
@@ -28,8 +27,7 @@
         <label for="precio">Precio (EUR)</label>
         <input type="number" id="precio" name="precio" min="0" step="0.5" required />
       </div>
-      <button type="submit">Guardar Registro</button>
+      <button type="submit">Registrar</button>
     </form>
-  </div>
 </body>
 </html>
