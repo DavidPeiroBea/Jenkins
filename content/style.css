@@ -1,4 +1,4 @@
-    * {
+* {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
@@ -8,8 +8,9 @@
     body {
       background: #f0f4f8;
       display: flex;
-      justify-content: center;
-      align-items: flex-start;
+      flex-direction: column; /* Cambiado para apilar los contenedores */
+      justify-content: flex-start;
+      align-items: center;
       min-height: 100vh;
       padding: 40px 20px;
     }
@@ -21,12 +22,13 @@
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
       width: 100%;
       max-width: 450px;
+      margin-bottom: 20px; /* Separación entre los contenedores */
     }
 
     h1 {
       text-align: center;
       margin-bottom: 30px;
-      color: #2c3e50;
+      color: #1abc9c; /* Nuevo color para el título */
     }
 
     form {
@@ -54,12 +56,12 @@
 
     input[type="text"]:focus,
     input[type="number"]:focus {
-      border-color: #3498db;
+      border-color: #1abc9c; /* Nuevo color para el foco */
       outline: none;
     }
 
     button {
-      background-color: #3498db;
+      background-color: #1abc9c; /* Nuevo color de fondo para el botón */
       color: white;
       font-weight: 700;
       padding: 12px 0;
@@ -71,12 +73,12 @@
     }
 
     button:hover {
-      background-color: #2980b9;
+      background-color: #16a085; /* Nuevo color de hover */
       transform: scale(0.9);
       transition: 1s;
     }
 
-    /* Para mostrar la tabla de registros */
+    /* Las reglas para la tabla se mantienen (no se usan en index.php, pero están en el CSS) */
     table {
       width: 100%;
       border-collapse: collapse;
